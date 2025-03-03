@@ -24,5 +24,16 @@ class Conservation extends Model
         return $this->belongsTo(User::class);
     }
 
+    public static function getConservationsForSidebar(User $user){
+        $users = User::getUsersExceptUser($user);
+        $groups = Group::getGroupForUser($user);
+
+        return $users->map(function(User $user){
+            return $user->toConservationArray();
+        })->concat($groups->map(function(Group $group){
+            return $group->toConservationArray();
+        }));
+    }
+
 
 }
